@@ -1,12 +1,17 @@
 package actions
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/ngs/go-amazon-product-advertising-api/amazon"
+	"io"
 	"log"
+	"strconv"
 	"strings"
 )
 
+// ProductLookup allows us to search for products using keywords/names
+// You cannot search for more than 32,767 products
 type ProductLookup struct {
 }
 
@@ -14,7 +19,17 @@ func (p *ProductLookup) ID() []string {
 	return []string{"productlookup", "lookup", "top", "pl"}
 }
 
-func (p *ProductLookup) Execute(params []string, client *amazon.Client) error {
+func (p *ProductLookup) Usage() string {
+	return "lookup [name] (resultsamount)"
+}
+
+func (p *ProductLookup) Execute(params []string, client *amazon.Client, writer io.Writer) error {
+	log.SetOutput(writer)
+
+	if len(params) < 1 {
+		return fmt.Errorf("expected params length of %s, got %d. Usage: %s", "> 1", len(params), p.Usage())
+	}
+
 	res, err := client.ItemSearch(amazon.ItemSearchParameters{
 		SearchIndex:    amazon.SearchIndexMusic,
 		ResponseGroups: []amazon.ItemSearchResponseGroup{amazon.ItemSearchResponseGroupLarge},
@@ -25,15 +40,49 @@ func (p *ProductLookup) Execute(params []string, client *amazon.Client) error {
 		return err
 	}
 
-	log.Printf("Total results found %d\n\n", res.Items.TotalResults)
+	var items []*ProductResult
+	resultAmount, isAmount := strconv.Atoi(params[len(params)-1])
+	var item amazon.Item
+	var placement uint16
+	if isAmount != nil {
+		items = make([]*ProductResult, res.Items.TotalResults)
+		for placement, item = range res.Items.Item {
+			if placement >= 65534 {
+				break
+			}
+			p, e := strconv.ParseFloat(item.ItemAttributes.ListPrice.Amount, 32)
+			if e != nil {
+				return e
+			}
+			items = append(items, &ProductResult{URL: item.DetailPageURL, Placement: placement, Price: float32(p)})
+		}
+	} else {
+		items = make([]*ProductResult, resultAmount)
+		for i := uint16(0); i < uint16(resultAmount); i++ {
+			if i < uint16(len(res.Items.Item)) {
+				item = res.Items.Item[i]
+				placement = i
+			}
+			p, e := strconv.ParseFloat(item.ItemAttributes.ListPrice.Amount, 32)
+			if e != nil {
+				return e
+			}
+			items = append(items, &ProductResult{URL: item.DetailPageURL, Placement: placement, Price: float32(p)})
+		}
+	}
 
-	for placement, item := range res.Items.Item {
-		fmt.Printf(`#%d_________________________
-[Title] %v
-[Price] %v
-[URL]   %v
-`, placement, item.ItemAttributes.Title, item.ItemAttributes.ListPrice, item.DetailPageURL)
+	for _, o := range items {
+		j, _ := json.Marshal(o)
+		log.Println(string(j))
 	}
 
 	return nil
+}
+
+type ProductResult struct {
+	URL string `json:"url"`
+
+	Placement uint16 `json:"place"`
+
+	Price float32 `json:"price"`
 }
