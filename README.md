@@ -16,11 +16,11 @@ func main() {
 }
 ```
 
-#Important!
+# Important!
 
 This API requires an AWS access key and ID, which requires an AWS account. **STANDARD AMAZON ACCOUNTS WILL NOT WORK**
 
-#Licenses and Contribution
+# Licenses and Contribution
 
 Go-Amazon is available for anybody to use freely. No ifs, ands, or buts!
 
