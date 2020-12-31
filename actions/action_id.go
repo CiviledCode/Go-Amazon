@@ -21,7 +21,7 @@ func FromID(ID string) (error, Action) {
 func init() {
 	// Push all of the actions into a list
 	actions := []func() Action{
-		func() Action { return &ProductLookup{} },
+		func() Action { return &ProductSearch{} },
 	}
 
 	// Register all actions from our list into a map containing aliases too

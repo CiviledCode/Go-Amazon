@@ -10,20 +10,20 @@ import (
 	"strings"
 )
 
-// ProductLookup allows us to search for products using keywords/names
+// ProductSearch allows us to search for products using keywords/names
 // You cannot search for more than 32,767 products
-type ProductLookup struct {
+type ProductSearch struct {
 }
 
-func (p *ProductLookup) ID() []string {
-	return []string{"productlookup", "lookup", "top", "pl"}
+func (p *ProductSearch) ID() []string {
+	return []string{"productsearch", "search", "top", "pl"}
 }
 
-func (p *ProductLookup) Usage() string {
-	return "lookup [name] (resultsamount)"
+func (p *ProductSearch) Usage() string {
+	return "search [name] (resultsamount)"
 }
 
-func (p *ProductLookup) Execute(params []string, client *amazon.Client, writer io.Writer) error {
+func (p *ProductSearch) Execute(params []string, client *amazon.Client, writer io.Writer) error {
 	log.SetOutput(writer)
 
 	if len(params) < 1 {

@@ -9,12 +9,11 @@ import (
 
 func main() {
 	client, err := amazon.NewFromEnvionment()
-
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	actions.HandleAction("top buttercup xxl 50", os.Stderr, client)
+	actions.HandleAction("search buttercup xxl 50", os.Stderr, client)
 	// TODO: Programmatically get AWS keys and information using HTTPS instead of requiring the user to do so
 	// TODO: Add a while loop for repetitive command
 }

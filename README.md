@@ -12,7 +12,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	actions.HandleAction("top silverware 50", os.Stderr, client)
+	actions.HandleAction("search silverware 50", os.Stderr, client)
 }
 ```
 
