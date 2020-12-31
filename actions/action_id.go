@@ -7,7 +7,7 @@ import (
 
 var RegisteredActions = map[string]func() Action{}
 
-// Get the proper action based on it's ID
+// FromID() returns the proper action based on it's ID
 func FromID(ID string) (error, Action) {
 	for id, action := range RegisteredActions {
 		if strings.ToLower(ID) == id {
