@@ -18,7 +18,7 @@ func main() {
 
 # Important!
 
-This API requires an AWS access key and ID, which requires an AWS account. **STANDARD AMAZON ACCOUNTS WILL NOT WORK**
+This API requires an AWS access key and ID, which requires an Amazon associates account with a Product Advertising API key. **YOU MUST REGISTER FOR THE ACCOUNT TO GET THIS INFORMATION** More information here https://webservices.amazon.com/paapi5/documentation/register-for-pa-api.html
 
 # Licenses and Contribution
 
