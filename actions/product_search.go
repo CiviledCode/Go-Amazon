@@ -46,7 +46,8 @@ func (p *ProductSearch) Execute(params []string, client *amazon.Client, writer i
 	var placement uint16
 	if isAmount != nil {
 		items = make([]*ProductResult, res.Items.TotalResults)
-		for placement, item = range res.Items.Item {
+		for ph, item := range res.Items.Item {
+			placement = uint16(ph)
 			if placement >= 65534 {
 				break
 			}
