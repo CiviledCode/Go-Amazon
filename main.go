@@ -1,7 +1,7 @@
 package main
 
 import (
-	"AmazonProductScraper/actions"
+	"github.com/Go-Amazon/actions"
 	"github.com/ngs/go-amazon-product-advertising-api/amazon"
 	"log"
 	"os"
@@ -14,7 +14,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	actions.HandleAction("top buttercup xxl", os.Stderr, client)
+	actions.HandleAction("top buttercup xxl 50", os.Stderr, client)
 	//TODO: Programmatically get AWS keys and information using HTTPS instead of requiring the user to do so
 	// TODO: Add a while loop for repetitive command
 }
